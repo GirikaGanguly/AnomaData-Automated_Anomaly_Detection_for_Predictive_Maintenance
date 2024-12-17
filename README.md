@@ -1,147 +1,163 @@
-# AnomaData-Automated_Anomaly_Detection_for_Predictive_Maintenance
-This project focuses on predictive maintenance by identifying anomalies in sensor data using machine learning. It includes EDA, feature engineering, handling class imbalance, and model training with Logistic Regression, Decision Tree, and Random Forest.
-
-### CAPSTONE PROJECT
 # **AnomaData - Automated Anomaly Detection for Predictive Maintenance**
 
-## **Overview**
-AnomaData is a machine learning project designed to predict anomalies in sensor data for predictive maintenance. By identifying equipment anomalies early, businesses can reduce risks, prevent unexpected downtime, and improve overall operational efficiency. 
-
-This project leverages statistical analysis, feature engineering, advanced visualization techniques, and machine learning models to develop a robust anomaly detection system.
+## **Author:**
+**GIRIKA GANGULY**  
 
 ---
 
-## **Features**
-- **Exploratory Data Analysis (EDA):** Visualizations to understand data trends, relationships, and outliers.
-- **Preprocessing Pipeline:** Automated handling of missing values, scaling, and feature engineering.
-- **Imbalanced Data Handling:** Using SMOTE for balancing the dataset to improve model performance.
-- **Model Training and Tuning:**
-  - Logistic Regression
-  - Decision Trees
-  - Random Forest
-  - Other models for experimentation.
-- **Hyperparameter Tuning:** Optimize models using GridSearchCV and RandomizedSearchCV.
-- **Evaluation Metrics:** Precision, recall, F1-score, ROC curves, and confusion matrices to assess model performance.
-- **Time Series Analysis:** Exploration of temporal trends in anomalies.
-- **Feature Importance:** Insights into which features contribute the most to anomaly detection.
+## **Project Link**  
+[GitHub Repository: AnomaData](https://github.com/GirikaGanguly/AnomaData-Automated_Anomaly_Detection_for_Predictive_Maintenance)
 
 ---
 
-## **Problem Statement**
-Equipment failure in various industries poses significant risks and costs. Predictive maintenance aims to address this by evaluating the condition of equipment through real-time monitoring. This project focuses on developing an anomaly detection system to predict and prevent such failures.
+## **Introduction**
+
+### **Problem Statement**  
+Predictive maintenance is critical for minimizing downtime and preventing costly equipment failures. This project focuses on building a machine learning pipeline to identify anomalies in machine behavior using historical sensor data. The goal is to predict potential breakdowns by accurately detecting anomalies, represented by the binary target variable `y` (1 = anomaly, 0 = normal).
+
+### **Objective**  
+Develop a robust and interpretable anomaly detection model that:  
+- Achieves an **F1-score** of at least **0.75** on the anomaly class.  
+- Addresses the challenges posed by class imbalance.  
+- Can be deployed as a predictive maintenance tool for industrial systems.  
+
+**Dataset:** : [Anoma_data.csv](https://kh3-ls-storage.s3.us-east-1.amazonaws.com/DS%20Project%20Guide%20Data%20Set/AnomaData.xlsx)
+
 
 ---
 
-## **Data**
-The dataset includes:
-- **Sensor readings:** Continuous variables representing real-time equipment metrics.
-- **Target labels:** Binary values (`y`), where `1` indicates an anomaly and `0` indicates normal behavior.
-- **Datetime:** Timestamps for time series analysis.
+## **Workflow and Methodology**
 
-Key characteristics:
-- ~18,000 rows of data.
-- 60+ features (sensor readings, derived metrics).
-- Highly imbalanced (anomalies account for <1% of the data).
+### **1. Exploratory Data Analysis (EDA)**  
+- **Imbalanced Dataset:** Anomalies account for <1% of the data.  
+- **Skewness:** Many numerical features exhibit high skewness, requiring transformation.  
+- **Outliers:** Detected and handled to minimize their effect.  
+- **Class Distribution:**
+  - Normal: ~18,000 samples.  
+  - Anomaly: ~120 samples.  
 
----
-
-## **Steps and Workflow**
-### **1. Exploratory Data Analysis (EDA)**
-- Visualize feature distributions, correlations, and target variable relationships.
-- Detect and handle outliers using IQR-based methods.
-- Generate insights into time-based patterns in anomalies.
-
-### **2. Preprocessing**
-- Time-based feature extraction (hour, day of the week, etc.).
-- Scaling and normalization for numerical features.
-- Handling class imbalance using SMOTE.
-
-### **3. Model Training and Evaluation**
-- Train multiple machine learning models to identify anomalies.
-- Use hyperparameter tuning for optimal performance.
-- Evaluate models using metrics like precision, recall, F1-score, and ROC-AUC.
-
-### **4. Advanced Visualizations**
-- Trends in anomalies over time.
-- Heatmaps for hourly and daily patterns.
-- Feature importance for tree-based models.
-
-### **5. Model Deployment Plan**
-- Package the model and preprocessing pipeline.
-- Provide recommendations for deploying the solution in a production environment.
+**Key Visualizations:**  
+- Heatmaps for feature correlations.  
+- Pair plots and scatter plots for separability analysis.  
+- Time series plots for detecting anomaly patterns.  
 
 ---
 
-## **Technologies Used**
-- **Python:** Core language for data analysis and modeling.
-- **Libraries:**
-  - `pandas`, `numpy`: Data manipulation and processing.
-  - `matplotlib`, `seaborn`: Advanced data visualizations.
-  - `scikit-learn`: Machine learning models and preprocessing.
-  - `imblearn`: Handling imbalanced datasets.
-  - `xgboost`: Advanced tree-based modeling.
-- **Google Colab:** Cloud-based development environment.
+### **2. Preprocessing Pipeline**  
+1. **Datetime Features:** Removed irrelevant datetime columns.  
+2. **Duplicates:** Identified and removed duplicate rows.  
+3. **Missing Values:** Imputed missing values using mean imputation.  
+4. **Skewness Correction:** Applied Yeo-Johnson transformation for skewed features.  
+5. **Outlier Handling:** IQR-based capping to limit extreme values.  
+6. **Scaling:** Standardized numerical features for model consistency.  
+7. **Class Imbalance:**  
+   - Used **SMOTE** for oversampling anomalies.  
+   - Applied `scale_pos_weight` in **XGBoost** to address imbalance.  
 
 ---
 
-## **Installation and Usage**
-### **1. Clone the Repository**
-```bash
-git clone https://github.com/<your-username>/AnomaData.git
-```
+### **3. Modeling**  
 
-### **2. Install Dependencies**
-```bash
-pip install -r requirements.txt
-```
+#### **Baseline Models:**  
+- Logistic Regression  
+- Decision Tree  
+- Random Forest  
+- XGBoost  
 
-### **3. Run the Notebook**
-Open the `AnomaData.ipynb` file in Google Colab or Jupyter Notebook.
+#### **Ensemble Learning:**  
+- Combined **Logistic Regression**, **Decision Tree**, **Random Forest**, and **XGBoost** in a Voting Classifier.  
+- Weighted soft voting was used to leverage XGBoost's strengths.  
 
-### **4. Data Input**
-Place the dataset in the appropriate folder as mentioned in the code.
+**Hyperparameter Tuning:**  
+- Conducted **GridSearchCV** for model optimization.  
+- Tuned Voting Classifier weights for best performance.  
 
 ---
 
-## **Project Structure**
-```
-AnomaData/
-│
-├── data/                      # Dataset folder
-│   ├── AnomaData.xlsx
-│   └── ...
-├── visuals/                   # Visualization outputs
-│   ├── histograms.png
-│   ├── time_series_anomalies.png
-│   └── ...
-├── src/                       # Source code for the project
-│   ├── preprocessing.py       # Preprocessing functions
-│   ├── modeling.py            # Model training and evaluation
-│   └── ...
-├── README.md                  # Project overview and instructions
-└── AnomaData.ipynb            # Main notebook
-```
+### **4. Evaluation**  
+
+**Metrics Used:**  
+- Accuracy, Precision, Recall, F1-Score, AUC-ROC.  
+
+**Key Visualizations:**  
+- **Confusion Matrices**: Analyze false positives/negatives.  
+- **ROC Curves**: Assess model discrimination.  
+- **Learning Curves**: Compare training and validation performance.  
 
 ---
 
 ## **Results**
-- **Accuracy:** Achieved ~90% accuracy on balanced data.
-- **F1-Score for Anomalies:** Significant improvement after using SMOTE.
-- **Insights:** Identified key features contributing to anomaly detection, such as `x43`, `x49`, and `x55`.
+
+### **Model Performance**  
+
+| **Model**                 | **Precision (1)** | **Recall (1)** | **F1-Score (1)** | **AUC-ROC** |  
+|---------------------------|------------------:|--------------:|----------------:|------------:|  
+| Logistic Regression       | 0.04             | 0.8           | 0.08            | 0.93        |  
+| Decision Tree             | 0.27             | 0.64          | 0.38            | 0.81        |  
+| Random Forest             | 0.75             | 0.6           | 0.67            | 0.98        |  
+| **XGBoost (Weighted)**    | 0.58             | 0.84          | 0.68            | 0.99        |  
+| **Voting Classifier**     | **0.64**         | **0.84**      | **0.72**        | **0.97**    |  
+
+### **Key Insights**  
+- **Voting Classifier** delivered the best performance with an F1-score of **0.72** for anomalies.  
+- The model achieved a **balanced precision (64%)** and recall (84%) with a robust **AUC-ROC of 0.97**.  
 
 ---
 
-## **Future Enhancements**
-1. **Deployment:** Package the model as an API for real-time anomaly detection.
-2. **Deep Learning Models:** Experiment with LSTM or autoencoders for better time series modeling.
-3. **Real-time Data Handling:** Integrate streaming data pipelines for continuous monitoring.
+## **Conclusion**
+
+### **Best Model:**  
+The **Voting Classifier** emerged as the best-performing model, achieving a balance between precision and recall for anomalies.
+
+### **Challenges and Solutions:**  
+1. **Class Imbalance:** Addressed using **SMOTE** and weighted training.  
+2. **Overfitting:** Managed through hyperparameter tuning and ensemble methods.  
+3. **Precision-Recall Trade-off:** Balanced through model ensembling and weight tuning.  
 
 ---
 
-## **Contributions**
-Feel free to fork this repository and submit pull requests. Contributions are welcome!
+## **Future Work**  
+1. **Advanced Feature Engineering:** Create derived features and explore feature interactions.  
+2. **Deep Learning Models:** Test **Autoencoders** and **LSTM** for sequential anomaly detection.  
+3. **Real-time Deployment:** Package the model into an API for real-time anomaly monitoring.  
+4. **Explainability:** Use SHAP or LIME for better interpretability.  
+5. **Threshold Optimization:** Dynamically adjust thresholds to minimize false positives.  
 
 ---
 
-## **License**
-This project is licensed under the MIT License - see the LICENSE file for details.
+## **How to Run the Project**  
+1. Clone the repository:  
+   ```bash
+   git clone https://github.com/GirikaGanguly/AnomaData-Automated_Anomaly_Detection_for_Predictive_Maintenance.git
+   ```  
+2. Install dependencies:  
+   ```bash
+   pip install -r requirements.txt
+   ```  
+3. Run the Jupyter Notebook for EDA and Modeling.  
+
+---
+
+## **Technologies Used**  
+- **Python Libraries:** Pandas, NumPy, Scikit-learn, XGBoost, SMOTE, Matplotlib, Seaborn.  
+- **Tools:** Jupyter Notebook, GridSearchCV, Visualization Libraries.  
+
+---
+
+## **Acknowledgments**  
+Special thanks to KH mentors for their continuous support and guidance throughout the capstone project.
+
+---
+
+## **Contributions**  
+Contributions are welcome! Fork the repository, create a branch, and submit a pull request.  
+
+---
+
+## **Contact**  
+For any queries, feel free to connect:  
+- **GitHub:** [GirikaGanguly](https://github.com/GirikaGanguly)  
+
+---
+
+**This project showcases the potential of machine learning for predictive maintenance and anomaly detection in industrial systems.**  
